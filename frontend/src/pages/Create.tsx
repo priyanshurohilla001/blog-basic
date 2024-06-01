@@ -1,16 +1,21 @@
 import axios from "axios";
 import { useEffect, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Appbar } from "../Components/Appbar";
 import { BACKEND_URL } from "../config";
+
+interface IFormInput {
+  title: string;
+  content: string;
+}
 
 export const Create = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<IFormInput>();
 
   const navigate = useNavigate();
 
@@ -18,14 +23,14 @@ export const Create = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login");
+      navigate("/signin");
     }
-  });
+  }, [navigate]);
 
-  const onSubmit = async (data: any) => {
-    submitref.current.disable;
-    submitref.current.innerHTML = "Loading...";
-    submitref.current.classList.add("disabled", "animate-pulse");
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    submitref.current!.disabled = true;
+    submitref.current!.innerHTML = "Loading...";
+    submitref.current!.classList.add("disabled", "animate-pulse");
 
     try {
       const res = await axios.post(`${BACKEND_URL}/api/v1/blog`, data, {
@@ -34,12 +39,11 @@ export const Create = () => {
         },
       });
 
-      submitref.current.classList.remove("disabled", "animate-pulse");
-      submitref.current.innerHTML = "Submit";
+      submitref.current!.classList.remove("disabled", "animate-pulse");
+      submitref.current!.innerHTML = "Submit";
 
       if (res.status !== 200) {
         alert("Error Occured While Creating Blog");
-
         return;
       }
 
@@ -48,8 +52,8 @@ export const Create = () => {
         navigate("/blogs");
       }, 1000);
     } catch (error) {
-      submitref.current.classList.remove("disabled", "animate-pulse");
-      submitref.current.innerHTML = "Submit";
+      submitref.current!.classList.remove("disabled", "animate-pulse");
+      submitref.current!.innerHTML = "Submit";
       alert("Error Occured While Creating Blog");
     }
   };

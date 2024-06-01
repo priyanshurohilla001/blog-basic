@@ -31,7 +31,7 @@ export const Homepage = () => {
                 Sign Up
               </a>
               <a
-                href="/login"
+                href="/signin"
                 className="px-4 py-2 bg-blue-700 text-white rounded shadow hover:scale-110 hover:transition hover:duration-200 hover:ease-in-out"
               >
                 Login
@@ -41,7 +41,7 @@ export const Homepage = () => {
         </div>
       </div>
       <div className=" bg-slate-100 py-4 flex justify-center">
-            Made By priyanshu with ❤️
+        Made By priyanshu with ❤️
       </div>
     </div>
   );

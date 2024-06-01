@@ -33,23 +33,25 @@ function Mainform() {
   } = useForm<SignupType>();
 
   const navigate = useNavigate();
-  const submitref = useRef();
+  const submitref = useRef<HTMLButtonElement>(null); // Define the type of submitref
 
-  const onSubmit = async (data) => {
-    submitref.current.disable;
-    submitref.current.innerHTML = "Loading...";
-    submitref.current.classList.add("disabled", "animate-pulse");
+  const onSubmit = async (data: SignupType) => { // Define the type of data
+    if (submitref.current) { // Check if submitref.current is defined
+      submitref.current.disabled = true; // Fix typo: disable -> disabled
+      submitref.current.innerHTML = "Loading...";
+      submitref.current.classList.add("disabled", "animate-pulse");
 
-    try {
-      const res = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, data);
-      const token = res.data.token;
-      localStorage.setItem("token", token);
-      navigate("/blogs");
-    } catch (error) {
-      alert("Error Occured While signup");
+      try {
+        const res = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, data);
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+        navigate("/blogs");
+      } catch (error) {
+        alert("Error Occured While signup");
+      }
+      submitref.current.classList.remove("disabled", "animate-pulse");
+      submitref.current.innerHTML = "Submit";
     }
-    submitref.current.classList.remove("disabled", "animate-pulse");
-    submitref.current.innerHTML = "Submit";
   };
 
   return (

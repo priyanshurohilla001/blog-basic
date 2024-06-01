@@ -3,7 +3,8 @@ import { SignupType } from "@priyanshurohilla/common-app";
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useState } from "react";
+
 
 export const SigninForm = () => {
   return (
@@ -25,8 +26,9 @@ export const SigninForm = () => {
   );
 };
 
+
 function Mainform() {
-  const submitref = useRef();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -36,10 +38,8 @@ function Mainform() {
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    submitref.current.disable;
-    submitref.current.innerHTML = "Loading...";
-    submitref.current.classList.add("disabled", "animate-pulse");
+  const onSubmit = async (data : SignupType) => {
+    setLoading(true);
     try {
       const res = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, data);
       const token = res.data.token;
@@ -48,8 +48,7 @@ function Mainform() {
     } catch (error) {
       alert("Error Occured While signup");
     }
-    submitref.current.classList.remove("disabled", "animate-pulse");
-    submitref.current.innerHTML = "Submit";
+    setLoading(false);
   };
 
   return (
@@ -71,10 +70,10 @@ function Mainform() {
           errors={errors}
         />
         <button
-          ref={submitref}
-          className="bg-slate-800 p-2 mt-4 shadow text-white  rounded"
+          disabled={loading}
+          className={`bg-slate-800 p-2 mt-4 shadow text-white rounded ${loading ? 'disabled animate-pulse' : ''}`}
         >
-          Submit
+          {loading ? 'Loading...' : 'Submit'}
         </button>
       </form>
     </div>

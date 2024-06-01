@@ -5,8 +5,17 @@ import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 import { Appbar } from "../Components/Appbar";
 
+interface Blog {
+  title: string;
+  content: string;
+  id: string;
+  author: {
+    name: string;
+  };
+}
+
 export const Blogs = () => {
-  const [data, setData] = useState([]); //data is an array of objects [ {title: "title", content: "content", id: "id"}
+  const [data, setData] = useState<Blog[]>([]); //data is an array of objects [ {title: "title", content: "content", id: "id"}
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -29,7 +38,7 @@ export const Blogs = () => {
   }, []);
   return (
     <div>
-      <Appbar AuthorName={data[0] && data[0].author.name}/>
+      <Appbar AuthorName={data[0]?.author.name}/>
       <div className="px-10 py-10 md:px-40 bg-slate-50">
         <h1 className="text-6xl text-center mb-20">Blogs</h1>
         {data &&

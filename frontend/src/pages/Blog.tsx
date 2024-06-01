@@ -4,9 +4,24 @@ import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { Appbar } from "../Components/Appbar";
 
+interface Blog {
+  title: string;
+  content: string;
+  author: {
+    name: string;
+  };
+}
+
+
+
 export const Blog = () => {
-  const [data, setData] = useState();
-  const { id } = useParams();
+  interface Params {
+    id: string;
+    [key: string]: string | undefined;
+  }
+
+  const [data, setData] = useState<Blog | null>(null);
+  const { id } = useParams<Params>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +41,7 @@ export const Blog = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   return (
     <div className="">
